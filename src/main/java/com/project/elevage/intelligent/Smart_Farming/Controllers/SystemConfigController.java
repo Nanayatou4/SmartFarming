@@ -15,16 +15,16 @@ public class SystemConfigController {
     private SystemConfigService systemConfigService;
 
     // Modifier ou ajouter une configuration
-    @PostMapping("/configurer")
-    public SystemConfigEntity configurer(@RequestParam String key, @RequestParam String value) {
-        return systemConfigService.mettreAJourConfig(key, value);
-    }
+//    @PostMapping("/configurer")
+//    public SystemConfigEntity configurer(@RequestParam String key, @RequestParam String value) {
+//        return systemConfigService.mettreAJourConfig(key, value);
+//    }
 
     // Obtenir une configuration
-    @GetMapping("/config/{key}")
-    public String obtenirConfig(@PathVariable String key) {
-        return systemConfigService.obtenirConfig(key);
-    }
+//    @GetMapping("/config/{key}")
+//    public String obtenirConfig(@PathVariable String key) {
+//        return systemConfigService.obtenirConfig(key);
+//    }
 
     // Lister toutes les configurations
     @GetMapping("/configs")

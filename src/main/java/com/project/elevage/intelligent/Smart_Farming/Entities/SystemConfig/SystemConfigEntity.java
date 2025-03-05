@@ -14,9 +14,9 @@ public class SystemConfigEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String key; // Exemple: "mqtt_broker_url", "smtp_server"
+//    @Column(nullable = false)
+//    private String config_key; // Exemple: "mqtt_broker_url", "smtp_server"
 
-    @Column(nullable = false)
-    private String value; // Valeur de configuration
+//    @Column(nullable = false)
+//    private String value; // Valeur de configuration
 }
