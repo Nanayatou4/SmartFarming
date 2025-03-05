@@ -5,6 +5,7 @@ import com.project.elevage.intelligent.Smart_Farming.Repositories.TelemetryDataE
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,11 +17,11 @@ public class TelemetryDataService {
 
     /**
      * Enregistrer une nouvelle donnée de télémétrie
-     */
-    public TelemetryDataEntity saveTelemetryData(TelemetryDataEntity data) {
-        data.setTimestamp(LocalDateTime.now()); // Date actuelle
-        return telemetryDataRepository.save(data);
-    }
+//     */
+//    public TelemetryDataEntity saveTelemetryData(TelemetryDataEntity data) {
+//        data.setTimestamp(LocalDateTime.now()); // Date actuelle
+//        return telemetryDataRepository.save(data);
+//    }
 
     /**
      * Récupérer toutes les données de télémétrie

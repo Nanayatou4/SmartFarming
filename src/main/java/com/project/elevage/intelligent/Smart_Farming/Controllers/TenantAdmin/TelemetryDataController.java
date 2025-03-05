@@ -19,11 +19,11 @@ public class TelemetryDataController {
     /**
      * Enregistrer une nouvelle donnée de télémétrie
      */
-    @PostMapping("/create")
-    public ResponseEntity<TelemetryDataEntity> saveTelemetryData(@RequestBody TelemetryDataEntity data) {
-        TelemetryDataEntity savedData = telemetryDataService.saveTelemetryData(data);
-        return ResponseEntity.ok(savedData);
-    }
+//    @PostMapping("/create")
+//    public ResponseEntity<TelemetryDataEntity> saveTelemetryData(@RequestBody TelemetryDataEntity data) {
+//        TelemetryDataEntity savedData = telemetryDataService.saveTelemetryData(data);
+//        return ResponseEntity.ok(savedData);
+//    }
 
     /**
      * Récupérer toutes les données de télémétrie

@@ -14,20 +14,20 @@ public class SystemConfigService {
     private SystemConfigEntityRepository systemConfigRepository;
 
     // Modifier ou ajouter une configuration
-    public SystemConfigEntity mettreAJourConfig(String key, String value) {
-        Optional<SystemConfigEntity> configOpt = systemConfigRepository.findByKey(key);
-        SystemConfigEntity config = configOpt.orElse(new SystemConfigEntity());
-        config.setKey(key);
-        config.setValue(value);
-        return systemConfigRepository.save(config);
-    }
+//    public SystemConfigEntity mettreAJourConfig(String key, String value) {
+//        Optional<SystemConfigEntity> configOpt = systemConfigRepository.findByKey(key);
+//        SystemConfigEntity config = configOpt.orElse(new SystemConfigEntity());
+////        config.setConfig_key(key);
+////        config.setValue(value);
+//        return systemConfigRepository.save(config);
+//    }
 
     // Récupérer une configuration spécifique
-    public String obtenirConfig(String key) {
-        return systemConfigRepository.findByKey(key)
-                .map(SystemConfigEntity::getValue)
-                .orElse("Non défini");
-    }
+//    public String obtenirConfig(String key) {
+//        return systemConfigRepository.findByKey(key)
+//                .map(SystemConfigEntity::getValue)
+//                .orElse("Non défini");
+//    }
 
     // Lister toutes les configurations
     public List<SystemConfigEntity> listerConfigurations() {
