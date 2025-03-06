@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface SystemConfigEntityRepository extends JpaRepository<SystemConfigEntity, Long> {
-    Optional<SystemConfigEntity> findByKey(String key);
+//    Optional<SystemConfigEntity> findByKey(String key);
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,9 +17,9 @@ public class TelemetryDataEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String sensorType; // Type de capteur : "Température", "Humidité", etc.
-    private double value; // Valeur mesurée
-    private LocalDateTime timestamp; // Date et heure de la mesure
+//    private String sensorType; // Type de capteur : "Température", "Humidité", etc.
+//    private double value; // Valeur mesurée
+//    private LocalDateTime timestamp; // Date et heure de la mesure
 
     @ManyToOne
     private DeviceEntity device; // L'appareil qui a envoyé la donnée
