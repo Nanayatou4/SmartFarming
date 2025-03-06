@@ -1,20 +1,20 @@
 package com.project.elevage.intelligent.Smart_Farming.Services;
 
 import com.project.elevage.intelligent.Smart_Farming.Entities.Animal.AnimalEntity;
-import com.project.elevage.intelligent.Smart_Farming.Repositories.AnimalEntityRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.project.elevage.intelligent.Smart_Farming.Repositories.AnimalRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class AnimalService {
 
-    @Autowired
-    private AnimalEntityRepository animalRepository;
+    private final AnimalRepository animalRepository;
 
-    public AnimalEntity ajouterAnimal(AnimalEntity animal) {
+    public AnimalEntity addAnimal(AnimalEntity animal) {
         return animalRepository.save(animal);
     }
 
@@ -33,6 +33,9 @@ public class AnimalService {
     }
 
     public void supprimerAnimal(Long id) {
+        if (!animalRepository.existsById(id)) {
+            throw new IllegalArgumentException("Animal avec l'ID " + id + " non trouvé.");
+        }
         animalRepository.deleteById(id);
     }
 }

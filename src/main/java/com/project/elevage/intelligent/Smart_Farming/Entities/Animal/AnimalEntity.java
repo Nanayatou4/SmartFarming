@@ -2,6 +2,7 @@ package com.project.elevage.intelligent.Smart_Farming.Entities.Animal;
 
 import com.project.elevage.intelligent.Smart_Farming.Entities.Eleveur.EleveurEntity;
 import com.project.elevage.intelligent.Smart_Farming.Entities.RFID.RFIDTagEntity;
+import com.project.elevage.intelligent.Smart_Farming.Entities.suiviAlimentation.Alimentation;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,5 +36,7 @@ public class AnimalEntity {
 
     @OneToOne(mappedBy = "animal", cascade = CascadeType.ALL)
     private RFIDTagEntity rfidTag;
+    @OneToMany(mappedBy = "animal", cascade = CascadeType.ALL)
+    private List<Alimentation> alimentations;
 
 }

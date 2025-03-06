@@ -44,11 +44,18 @@ public final class TenantEntity  {
     @Column(name = "is_Active")
     private boolean isActive;
 
-
     @OneToMany(mappedBy = "tenant")
     private List<UserEntity> utilisateurs;
 
     @OneToMany(mappedBy = "tenant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<EdgeDeviceEntity> edgeDevices = new ArrayList<>();
 
+    // Ajout des getters et setters manuels pour éviter les erreurs de compilation
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

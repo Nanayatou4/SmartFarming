@@ -19,7 +19,7 @@ public class EleveurController {
 
     @PostMapping("/ajouter-animal")
     public ResponseEntity<AnimalEntity> ajouterAnimal(@RequestBody AnimalEntity animal) {
-        return ResponseEntity.ok(animalService.ajouterAnimal(animal));
+        return ResponseEntity.ok(animalService.addAnimal(animal));
     }
 
     @GetMapping("/liste-animaux/{eleveurId}")
