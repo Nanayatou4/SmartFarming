@@ -97,14 +97,14 @@ public class RFIDService {
         Optional<RFIDTagEntity> tagEntityOpt = rfidTagRepository.findByTagId(tagId); // Corriger l'appel au repository
 
         if (tagEntityOpt.isEmpty()) {
-            notificationService.envoyerAlerte("Tag inconnu détecté : " + tagId);
+           // notificationService.envoyerAlerte("Tag inconnu détecté : " + tagId);
             return "Alerte : Tag inconnu !";
         }
 
         RFIDTagEntity tagEntity = tagEntityOpt.get();
 
         if (tagEntity.getIsLost()) {
-            notificationService.envoyerAlerte("Tag perdu retrouvé : " + tagId);
+           // notificationService.envoyerAlerte("Tag perdu retrouvé : " + tagId);
             tagEntity.setIsLost(false);
             rfidTagRepository.save(tagEntity);
             return "Tag retrouvé et mis à jour.";

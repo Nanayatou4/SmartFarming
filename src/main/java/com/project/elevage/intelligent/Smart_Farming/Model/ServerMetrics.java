@@ -1,8 +1,11 @@
 package com.project.elevage.intelligent.Smart_Farming.Model;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@AllArgsConstructor
+@Getter
+@Setter
 public class ServerMetrics {
 
     private double chargeCpu;
@@ -10,4 +13,10 @@ public class ServerMetrics {
     private long memoireTotale;
 
     private long memoireLibre;
+
+    public ServerMetrics(double chargeCpu, long memTotal, long memLibre) {
+        this.chargeCpu = chargeCpu;
+        this.memoireTotale = memTotal;
+        this.memoireLibre = memLibre;
+    }
 }

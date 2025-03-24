@@ -1,5 +1,6 @@
 package com.project.elevage.intelligent.Smart_Farming.Entities.Integration;
 
+import com.project.elevage.intelligent.Smart_Farming.Entities.Tenants.TenantEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,4 +26,8 @@ public class IntegrationEntity {
 
     @Column(nullable = false)
     private Boolean enabled; // Activation/Désactivation
+
+    @ManyToOne
+    @JoinColumn(name = "tenant_id", nullable = false)
+    private TenantEntity tenant;
 }

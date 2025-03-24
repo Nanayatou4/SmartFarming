@@ -1,7 +1,9 @@
 package com.project.elevage.intelligent.Smart_Farming.Services;
 
 import com.project.elevage.intelligent.Smart_Farming.Entities.Device.DeviceEntity;
+import com.project.elevage.intelligent.Smart_Farming.Entities.Tenants.TenantEntity;
 import com.project.elevage.intelligent.Smart_Farming.Repositories.DeviceEntityRepository;
+import com.project.elevage.intelligent.Smart_Farming.Repositories.TenantEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,28 +16,36 @@ public class DeviceService {
     @Autowired
     private DeviceEntityRepository deviceRepository;
 
+    @Autowired
+    private TenantEntityRepository tenantRepository;
+
+
     /**
-     * Ajouter un nouveau dispositif
-     * @param device L'objet dispositif à ajouter
-     * @return Le dispositif ajouté
+     * Ajouter un dispositif et l'associer à un tenant
      */
-    public DeviceEntity addDevice(DeviceEntity device) {
+    public DeviceEntity addDeviceToTenant(Long tenantId, DeviceEntity device) {
+        // Récupérer le tenant correspondant à l'ID
+        TenantEntity tenant = tenantRepository.findById(tenantId)
+                .orElseThrow(() -> new RuntimeException("Tenant non trouvé"));
+
+        // Associer le device au tenant
+        device.setTenant(tenant);
+
+        // Sauvegarder le device avec la relation au tenant
         return deviceRepository.save(device);
     }
 
     /**
      * Modifier un dispositif existant
-     * @param deviceId L'ID du dispositif à modifier
-     * @param device L'objet dispositif mis à jour
-     * @return Le dispositif mis à jour
      */
     public DeviceEntity updateDevice(Long deviceId, DeviceEntity device) {
         Optional<DeviceEntity> existingDevice = deviceRepository.findById(deviceId);
         if (existingDevice.isPresent()) {
             DeviceEntity updatedDevice = existingDevice.get();
-            updatedDevice.setName(device.getName());  // Mise à jour de l'attribut name
-            updatedDevice.setType(device.getType());  // Mise à jour du type
-            // Ajouter d'autres mises à jour de champs selon ton modèle
+            updatedDevice.setName(device.getName());
+            updatedDevice.setType(device.getType());
+            updatedDevice.setFrequency(device.getFrequency());
+            updatedDevice.setDeviceToken(device.getDeviceToken());
             return deviceRepository.save(updatedDevice);
         }
         throw new RuntimeException("Dispositif non trouvé");
@@ -52,6 +62,20 @@ public class DeviceService {
         } else {
             throw new RuntimeException("Dispositif non trouvé");
         }
+    }
+
+    /**
+     * Récupérer la liste des dispositifs d'un tenant spécifique
+     * @param tenantId L'ID du tenant
+     * @return Liste des dispositifs
+     */
+    public List<DeviceEntity> getDevicesByTenant(Long tenantId) {
+        // Récupérer le tenant pour vérifier la validité
+        TenantEntity tenant = tenantRepository.findById(tenantId)
+                .orElseThrow(() -> new RuntimeException("Tenant non trouvé"));
+
+        // Retourner la liste des dispositifs associés à ce tenant
+        return deviceRepository.findByTenant(tenant);
     }
 
     /**

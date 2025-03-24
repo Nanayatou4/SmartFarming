@@ -2,6 +2,7 @@ package com.project.elevage.intelligent.Smart_Farming.Entities.Asset;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.elevage.intelligent.Smart_Farming.Entities.Device.DeviceEntity;
+import com.project.elevage.intelligent.Smart_Farming.Entities.Tenants.TenantEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,5 +24,10 @@ public class AssetEntity {
     @JoinColumn(name = "device_id")
     @JsonIgnore
     private DeviceEntity device;
-    // Association avec un dispositif
+
+    @ManyToOne
+    @JoinColumn(name = "tenant_id", nullable = false)
+    private TenantEntity tenant;
+
+
 }

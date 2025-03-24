@@ -18,6 +18,8 @@ public class WidgetEntity {
   private String title;  // Titre du widget
   private String type;   // Type de widget (par exemple : 'chart', 'gauge', etc.)
   private String config; // Configuration du widget (JSON ou autre)
+  @Enumerated(EnumType.STRING)
+  private WidgetStatus status = WidgetStatus.ACTIVE; // Par défaut actif
 
   @ManyToOne
   private DashboardEntity dashboard;  // Le dashboard auquel appartient ce widget

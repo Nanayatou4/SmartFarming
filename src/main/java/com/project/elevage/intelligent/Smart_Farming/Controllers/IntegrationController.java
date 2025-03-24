@@ -1,5 +1,6 @@
 package com.project.elevage.intelligent.Smart_Farming.Controllers;
 
+import com.project.elevage.intelligent.Smart_Farming.DTO.IntegrationDTO;
 import com.project.elevage.intelligent.Smart_Farming.Entities.Integration.IntegrationEntity;
 import com.project.elevage.intelligent.Smart_Farming.Services.IntegrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/integrations")
+@RequestMapping("/api/admins/integrations")
 public class IntegrationController {
 
     @Autowired
@@ -16,21 +17,24 @@ public class IntegrationController {
 
     // Ajouter ou modifier une intégration
     @PostMapping("/ajouter")
-    public IntegrationEntity ajouterIntegration(@RequestParam String name,
-                                                @RequestParam String type,
-                                                @RequestParam String configuration,
-                                                @RequestParam Boolean enabled) {
-        return integrationService.enregistrerIntegration(name, type, configuration, enabled);
+    public IntegrationEntity ajouterIntegration(@RequestBody IntegrationDTO integrationDTO) {
+        return integrationService.enregistrerIntegration(
+                integrationDTO.getName(),
+                integrationDTO.getTenantId(),
+                integrationDTO.getType(),
+                integrationDTO.getConfiguration(),
+                integrationDTO.getEnabled()
+        );
     }
 
     // Activer/Désactiver une intégration
     @PostMapping("/changerEtat")
-    public IntegrationEntity changerEtat(@RequestParam String name, @RequestParam Boolean enabled) {
-        return integrationService.changerEtatIntegration(name, enabled);
+    public IntegrationEntity changerEtat(@RequestBody IntegrationDTO integrationDTO) {
+        return integrationService.changerEtatIntegration(integrationDTO.getName(), integrationDTO.getEnabled());
     }
 
     // Obtenir la liste des intégrations
-    @GetMapping("/toutes")
+    @GetMapping("/all")
     public List<IntegrationEntity> obtenirIntegrations() {
         return integrationService.obtenirToutesIntegrations();
     }

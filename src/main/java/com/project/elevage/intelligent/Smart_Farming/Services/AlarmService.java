@@ -42,7 +42,7 @@ public class AlarmService {
      * Récupérer les alarmes actives
      */
     public List<AlarmEntity> getActiveAlarms() {
-        return alarmRepository.findByStatus("ACTIVE");
+        return alarmRepository.findByStatus(AlarmStatus.ACTIVE);
     }
 
     /**

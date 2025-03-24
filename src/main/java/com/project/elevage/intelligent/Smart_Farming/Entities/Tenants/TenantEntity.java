@@ -1,14 +1,14 @@
 package com.project.elevage.intelligent.Smart_Farming.Entities.Tenants;
 
-import com.project.elevage.intelligent.Smart_Farming.Entities.Edge.EdgeDeviceEntity;
-import com.project.elevage.intelligent.Smart_Farming.Entities.TenantAdmin.TenantAdminEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.elevage.intelligent.Smart_Farming.Entities.Device.DeviceEntity;
+import com.project.elevage.intelligent.Smart_Farming.Entities.Edge.EdgeEntity;
+import com.project.elevage.intelligent.Smart_Farming.Entities.Resources.TenantResource;
 import com.project.elevage.intelligent.Smart_Farming.Entities.UserEntity;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -45,10 +45,17 @@ public final class TenantEntity  {
     private boolean isActive;
 
 
-    @OneToMany(mappedBy = "tenant")
+    @OneToMany(mappedBy = "tenant", fetch = FetchType.LAZY)
     private List<UserEntity> utilisateurs;
 
     @OneToMany(mappedBy = "tenant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<EdgeDeviceEntity> edgeDevices = new ArrayList<>();
+    private List<EdgeEntity> edgeDevices;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "tenant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TenantResource> tenantResources ;
+
+    @OneToMany(mappedBy = "tenant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DeviceEntity> devices;
 
 }

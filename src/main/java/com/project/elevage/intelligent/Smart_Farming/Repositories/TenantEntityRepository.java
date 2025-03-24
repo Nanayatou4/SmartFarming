@@ -8,9 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TenantEntityRepository extends JpaRepository<TenantEntity, Long> {
+
+        Optional<TenantEntity> findByTitle(String title);
 
         List<TenantEntity> findByTitleContainingIgnoreCase(String title);
 

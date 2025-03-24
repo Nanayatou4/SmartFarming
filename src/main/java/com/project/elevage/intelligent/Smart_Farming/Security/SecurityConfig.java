@@ -33,17 +33,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
+        http
                 .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/api/admins/**").hasRole("ADMIN_SYSTEM")
                         .requestMatchers("/api/tenant-admins/**").hasRole("TENANT_ADMIN")
+                        .requestMatchers("/api/eleveur/**").hasRole("ELEVEUR")
+                        .requestMatchers("/api/veterinaire").hasRole("VETERINAIRE")
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                return http.build();
     }
 
     @Bean

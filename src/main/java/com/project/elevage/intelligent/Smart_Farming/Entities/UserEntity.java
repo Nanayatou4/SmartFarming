@@ -1,5 +1,6 @@
 package com.project.elevage.intelligent.Smart_Farming.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.elevage.intelligent.Smart_Farming.Entities.Tenants.TenantEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 @Table(name = "users")
 public class UserEntity {
     @Id
@@ -22,7 +24,7 @@ public class UserEntity {
     @Column(name = "email", unique = true)
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "mot_de_passe")
     private String password;
 
     @Column(name = "prenom")
@@ -46,9 +48,9 @@ public class UserEntity {
 
     @ManyToOne
     @JoinColumn(name = "tenant_id")
+    @JsonIgnore
     private TenantEntity tenant;
 
-    //dashboard
 }
 
 

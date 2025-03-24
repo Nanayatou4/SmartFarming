@@ -1,7 +1,11 @@
 package com.project.elevage.intelligent.Smart_Farming.Services;
 
 import com.project.elevage.intelligent.Smart_Farming.Entities.Dashboard.DashboardEntity;
+import com.project.elevage.intelligent.Smart_Farming.Entities.Tenants.TenantEntity;
+import com.project.elevage.intelligent.Smart_Farming.Entities.UserEntity;
 import com.project.elevage.intelligent.Smart_Farming.Repositories.DashboardEntityRepository;
+import com.project.elevage.intelligent.Smart_Farming.Repositories.TenantEntityRepository;
+import com.project.elevage.intelligent.Smart_Farming.Repositories.UserEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,31 +18,48 @@ public class DashboardService {
     @Autowired
     private DashboardEntityRepository dashboardRepository;
 
+    @Autowired
+    private TenantEntityRepository tenantRepository;
+
+    @Autowired
+    private UserEntityRepository userRepository;
+
+
     /**
-     * Créer un nouveau dashboard
-     * @param dashboard Le dashboard à créer
-     * @return Le dashboard créé
+     * Créer un dashboard pour un Tenant spécifique
      */
-    public DashboardEntity createDashboard(DashboardEntity dashboard) {
+    public DashboardEntity createDashboard(Long tenantId, DashboardEntity dashboard) {
+        TenantEntity tenant = tenantRepository.findById(tenantId)
+                .orElseThrow(() -> new RuntimeException("Tenant non trouvé"));
+
+        dashboard.setTenant(tenant);
         return dashboardRepository.save(dashboard);
     }
 
     /**
-     * Partager un dashboard avec un autre utilisateur
-     * @param dashboardId L'ID du dashboard
-     * @param userId L'ID de l'utilisateur
+     * Récupérer tous les dashboards d'un Tenant
      */
-    public void shareDashboard(Long dashboardId, Long userId) {
-        Optional<DashboardEntity> dashboard = dashboardRepository.findById(dashboardId);
-        if (dashboard.isPresent()) {
-            DashboardEntity sharedDashboard = dashboard.get();
-            // Ajouter la logique pour associer l'utilisateur au dashboard (par exemple, un partage)
-            // sharedDashboard.addUser(userId);
-            dashboardRepository.save(sharedDashboard);
-        } else {
-            throw new RuntimeException("Dashboard non trouvé");
-        }
+    public List<DashboardEntity> getDashboardsByTenant(Long tenantId) {
+        TenantEntity tenant = tenantRepository.findById(tenantId)
+                .orElseThrow(() -> new RuntimeException("Tenant non trouvé"));
+
+        return dashboardRepository.findByTenant(tenant);
     }
+
+    /**
+     * Modifier un dashboard
+     */
+    public DashboardEntity updateDashboard(Long dashboardId, DashboardEntity dashboardDetails) {
+        DashboardEntity dashboard = dashboardRepository.findById(dashboardId)
+                .orElseThrow(() -> new RuntimeException("Dashboard non trouvé"));
+
+        dashboard.setName(dashboardDetails.getName());
+        dashboard.setDescription(dashboardDetails.getDescription());
+
+        return dashboardRepository.save(dashboard);
+    }
+
+
 
     /**
      * Personnaliser un dashboard (modifier l'agencement ou les widgets)
@@ -47,14 +68,13 @@ public class DashboardService {
      * @return Le dashboard mis à jour
      */
     public DashboardEntity customizeDashboard(Long dashboardId, DashboardEntity dashboard) {
-        Optional<DashboardEntity> existingDashboard = dashboardRepository.findById(dashboardId);
-        if (existingDashboard.isPresent()) {
-            DashboardEntity updatedDashboard = existingDashboard.get();
-            updatedDashboard.setName(dashboard.getName());
-            updatedDashboard.setWidgets(dashboard.getWidgets());  // Mise à jour des widgets
-            return dashboardRepository.save(updatedDashboard);
-        }
-        throw new RuntimeException("Dashboard non trouvé");
+        DashboardEntity existingDashboard = dashboardRepository.findById(dashboardId)
+                .orElseThrow(() -> new RuntimeException("Dashboard non trouvé"));
+
+        existingDashboard.setName(dashboard.getName());
+        existingDashboard.setWidgets(dashboard.getWidgets());
+
+        return dashboardRepository.save(existingDashboard);
     }
 
     /**
@@ -62,19 +82,29 @@ public class DashboardService {
      * @param dashboardId L'ID du dashboard à supprimer
      */
     public void deleteDashboard(Long dashboardId) {
-        Optional<DashboardEntity> dashboard = dashboardRepository.findById(dashboardId);
-        if (dashboard.isPresent()) {
-            dashboardRepository.delete(dashboard.get());
-        } else {
+        if (!dashboardRepository.existsById(dashboardId)) {
             throw new RuntimeException("Dashboard non trouvé");
         }
+        dashboardRepository.deleteById(dashboardId);
     }
+
 
     /**
      * Récupérer tous les dashboards pour un locataire
      * @return Liste des dashboards
      */
-    public List<DashboardEntity> getAllDashboards() {
+    public List<DashboardEntity> getAllDashboardsForAdmin() {
         return dashboardRepository.findAll();
     }
+
+    /**
+     * Récupérer les dashboards accessibles par un utilisateur
+     */
+    public List<DashboardEntity> getUserDashboards(Long userId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        return dashboardRepository.findByTenant(user.getTenant());
+    }
+
 }

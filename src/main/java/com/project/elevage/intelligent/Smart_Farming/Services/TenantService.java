@@ -31,16 +31,33 @@ public class TenantService {
 
     public TenantEntity updateTenant(Long id, TenantEntity updatedTenant) {
         return tenantRepository.findById(id).map(tenant -> {
-            tenant.setTitle(updatedTenant.getTitle());
-            tenant.setEmail(updatedTenant.getEmail());
-            tenant.setPhone(updatedTenant.getPhone());
-            tenant.setAddress(updatedTenant.getAddress());
-            tenant.setRegion(updatedTenant.getRegion());
-            tenant.setSearchText(updatedTenant.getSearchText());
-            tenant.setDescription(updatedTenant.getDescription());
+            if (updatedTenant.getTitle() != null) {
+                tenant.setTitle(updatedTenant.getTitle());
+            }
+            if (updatedTenant.getEmail() != null) {
+                tenant.setEmail(updatedTenant.getEmail());
+            }
+            if (updatedTenant.getPhone() != null) {
+                tenant.setPhone(updatedTenant.getPhone());
+            }
+            if (updatedTenant.getAddress() != null) {
+                tenant.setAddress(updatedTenant.getAddress());
+            }
+            if (updatedTenant.getRegion() != null) {
+                tenant.setRegion(updatedTenant.getRegion());
+            }
+            if (updatedTenant.getSearchText() != null) {
+                tenant.setSearchText(updatedTenant.getSearchText());
+            }
+            if (updatedTenant.getDescription() != null) {
+                tenant.setDescription(updatedTenant.getDescription());
+            }
+            tenant.setActive(updatedTenant.isActive());
+
             return tenantRepository.save(tenant);
         }).orElseThrow(() -> new RuntimeException("Tenant non trouvé"));
     }
+
 
     public List<TenantEntity> searchTenantsByTitle(String title) {
         return tenantRepository.findByTitleContainingIgnoreCase(title);

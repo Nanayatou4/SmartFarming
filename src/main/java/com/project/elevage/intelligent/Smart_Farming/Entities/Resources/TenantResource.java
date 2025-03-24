@@ -1,5 +1,6 @@
 package com.project.elevage.intelligent.Smart_Farming.Entities.Resources;
 
+import com.project.elevage.intelligent.Smart_Farming.Entities.Tenants.TenantEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,8 +15,9 @@ public class TenantResource {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String tenantId; // Identifiant du locataire
+    @ManyToOne
+    @JoinColumn(name = "tenant_id", nullable = false)
+    private TenantEntity tenant;
 
     private Long storageQuota; // Stockage alloué (en MB)
     private Long usedStorage;  // Stockage utilisé (en MB)

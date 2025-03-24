@@ -8,6 +8,7 @@ import com.project.elevage.intelligent.Smart_Farming.Repositories.EleveurEntityR
 import com.project.elevage.intelligent.Smart_Farming.Repositories.TenantAdminEntityRepository;
 import com.project.elevage.intelligent.Smart_Farming.Repositories.TenantEntityRepository;
 import com.project.elevage.intelligent.Smart_Farming.Repositories.VeterinaireEntityRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,23 +36,62 @@ public class TenantAdminService {
 
 
     public TenantAdminEntity createTenantAdmin(Long tenantId, TenantAdminEntity admin) {
+        //verifier l'email du tenant admin
+
+        // Vérifier si le tenant existe
         TenantEntity tenant = tenantRepository.findById(tenantId)
                 .orElseThrow(() -> new RuntimeException("Tenant non trouvé"));
 
+        // Vérifier s'il existe déjà un admin pour ce tenant
+        boolean adminExists = tenantAdminRepository.existsByTenantId(tenantId);
+        if (adminExists) {
+            throw new IllegalStateException("Ce tenant a déjà un administrateur.");
+        }
+
         admin.setTenant(tenant);
-        admin.setPassword(passwordEncoder.encode(admin.getPassword())); // Crypter le mot de passe
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+
         return tenantAdminRepository.save(admin);
     }
 
-    public TenantAdminEntity updateTenantAdmin(Long id, TenantAdminEntity updatedAdmin) {
-        return tenantAdminRepository.findById(id).map(admin -> {
+    private void applyUpdates(TenantAdminEntity admin, TenantAdminEntity updatedAdmin) {
+        if (updatedAdmin.getNom() != null) {
+            admin.setNom(updatedAdmin.getNom());
+        }
+        if (updatedAdmin.getPrenom() != null) {
+            admin.setPrenom(updatedAdmin.getPrenom());
+        }
+        if (updatedAdmin.getEmail() != null) {
             admin.setEmail(updatedAdmin.getEmail());
-            admin.setPassword(updatedAdmin.getPassword());
+        }
+        if (updatedAdmin.getTelephone() != null) {
+            admin.setTelephone(updatedAdmin.getTelephone());
+        }
+        if (updatedAdmin.getPassword() != null && !updatedAdmin.getPassword().isEmpty()) {
+            admin.setPassword(passwordEncoder.encode(updatedAdmin.getPassword()));
+        }
+    }
+
+    public TenantAdminEntity updateMyProfile(Long myId, TenantAdminEntity updatedAdmin) {
+        return tenantAdminRepository.findById(myId).map(admin -> {
+            applyUpdates(admin, updatedAdmin);
+            return tenantAdminRepository.save(admin);
+        }).orElseThrow(() -> new RuntimeException("Profil non trouvé"));
+    }
+
+
+    public TenantAdminEntity updateTenantAdminBySystem(Long id, TenantAdminEntity updatedAdmin) {
+        return tenantAdminRepository.findById(id).map(admin -> {
+            applyUpdates(admin, updatedAdmin);
             return tenantAdminRepository.save(admin);
         }).orElseThrow(() -> new RuntimeException("Admin non trouvé"));
     }
 
+
     public void deleteTenantAdmin(Long id) {
+        if (!tenantAdminRepository.existsById(id)) {
+            throw new EntityNotFoundException("Admin non trouvé");
+        }
         tenantAdminRepository.deleteById(id);
     }
 

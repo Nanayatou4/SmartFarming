@@ -2,6 +2,7 @@ package com.project.elevage.intelligent.Smart_Farming.Services;
 
 import com.project.elevage.intelligent.Smart_Farming.Entities.SystemStatus.SystemStatusEntity;
 import com.project.elevage.intelligent.Smart_Farming.Repositories.SystemStatusEntityRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,19 +19,24 @@ public class SystemStatusService {
         this.systemStatusRepository = systemStatusRepository;
     }
 
-    // 🔹 1️⃣ Ajouter un relevé de statut
+    // Ajouter un relevé de statut
     public SystemStatusEntity addSystemStatus(String deviceName, String status, double battery, double temperature, double humidity) {
         SystemStatusEntity systemStatus = new SystemStatusEntity(null, deviceName, status, battery, temperature, humidity, LocalDateTime.now());
         return systemStatusRepository.save(systemStatus);
     }
 
-    // 🔹 2️⃣ Lister tous les statuts du système
+    // Lister tous les statuts du système
     public List<SystemStatusEntity> getAllStatuses() {
         return systemStatusRepository.findAll();
     }
 
-    // 🔹 3️⃣ Obtenir l’historique d’un dispositif
+    // Obtenir l’historique d’un dispositif
     public List<SystemStatusEntity> getDeviceHistory(String deviceName) {
-        return systemStatusRepository.findByDeviceName(deviceName);
+        List<SystemStatusEntity> history = systemStatusRepository.findByDeviceName(deviceName);
+        if (history.isEmpty()) {
+            throw new EntityNotFoundException("Aucun historique trouvé pour l'appareil: " + deviceName);
+        }
+        return history;
     }
+
 }

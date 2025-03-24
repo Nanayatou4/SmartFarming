@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TenantResourceRepository extends JpaRepository<TenantResource, Long> {
-    TenantResource findByTenantId(String tenantId);
+    TenantResource findByTenantId(Long tenantId);
 }

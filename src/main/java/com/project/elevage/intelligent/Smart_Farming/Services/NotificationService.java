@@ -1,18 +1,20 @@
 package com.project.elevage.intelligent.Smart_Farming.Services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class NotificationService {
 
-    public void envoyerAlerte(String message) {
-        System.out.println("📢 ALERTE : " + message);
+    @Autowired
+    private EmailService emailService;
 
-        // TODO : Envoyer un email, un SMS, ou un message Telegram
-        // Exemple : envoyerEmail(message);
-    }
+    public void envoyerAlerte(String destinataire, String message) {
+        System.out.println("ALERTE : " + message);
 
-    private void envoyerEmail(String message) {
-        // Implémentation pour envoyer un email
+        // Envoi de l'alerte par email
+        emailService.sendAlert(destinataire, "Alerte Système", message);
+
+
     }
 }

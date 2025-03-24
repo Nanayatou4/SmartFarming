@@ -1,5 +1,6 @@
 package com.project.elevage.intelligent.Smart_Farming.Entities.Dashboard;
 
+import com.project.elevage.intelligent.Smart_Farming.Entities.Tenants.TenantEntity;
 import com.project.elevage.intelligent.Smart_Farming.Entities.UserEntity;
 import com.project.elevage.intelligent.Smart_Farming.Entities.Widget.WidgetEntity;
 import jakarta.persistence.*;
@@ -20,9 +21,11 @@ public class DashboardEntity {
     private String name;  // Nom du tableau de bord
     private String description;  // Description du tableau de bord
 
-    @OneToMany
+    @OneToMany(mappedBy = "dashboard")
     private List<WidgetEntity> widgets;  // Liste des widgets dans le tableau de bord
 
-    @ManyToMany
-    private List<UserEntity> sharedUsers;  // Liste des utilisateurs ayant accès au dashboard
+    @ManyToOne
+    @JoinColumn(name = "tenant_id", nullable = false)
+    private TenantEntity tenant;
+
 }

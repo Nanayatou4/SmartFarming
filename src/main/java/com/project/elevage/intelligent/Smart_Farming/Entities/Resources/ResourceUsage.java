@@ -4,6 +4,7 @@ import com.project.elevage.intelligent.Smart_Farming.Entities.Tenants.TenantEnti
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.time.LocalDateTime;
 
@@ -19,6 +20,7 @@ public class ResourceUsage {
 
     @ManyToOne
     @JoinColumn(name = "tenant_id", nullable = false)
+    @JsonIgnore
     private TenantEntity tenant;
 
     private double cpuUsage;  // En pourcentage

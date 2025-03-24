@@ -19,7 +19,7 @@ public class AnalyticsService {
         this.systemStatusRepository = systemStatusRepository;
     }
 
-    // 🔹 1️⃣ Moyenne de température par dispositif
+    // Moyenne de température par dispositif
     public Map<String, Double> getAverageTemperature() {
         List<SystemStatusEntity> statuses = systemStatusRepository.findAll();
         return statuses.stream()
@@ -29,7 +29,7 @@ public class AnalyticsService {
                 ));
     }
 
-    // 🔹 2️⃣ Moyenne d’humidité par dispositif
+    // Moyenne d’humidité par dispositif
     public Map<String, Double> getAverageHumidity() {
         List<SystemStatusEntity> statuses = systemStatusRepository.findAll();
         return statuses.stream()

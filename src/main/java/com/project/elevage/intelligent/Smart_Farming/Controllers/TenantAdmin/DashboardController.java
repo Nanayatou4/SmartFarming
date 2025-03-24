@@ -9,65 +9,42 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/dashboards")
+@RequestMapping("/api/tenant-admins/dashboards")
 public class DashboardController {
 
     @Autowired
     private DashboardService dashboardService;
 
-    /**
-     * Créer un nouveau dashboard
-     * @param dashboard Le dashboard à créer
-     * @return Réponse avec le dashboard créé
-     */
-    @PostMapping("/create")
-    public ResponseEntity<DashboardEntity> createDashboard(@RequestBody DashboardEntity dashboard) {
-        DashboardEntity newDashboard = dashboardService.createDashboard(dashboard);
-        return ResponseEntity.ok(newDashboard);
+
+    @PostMapping("/tenant/{tenantId}")
+    public DashboardEntity createDashboard(@PathVariable Long tenantId, @RequestBody DashboardEntity dashboard) {
+        return dashboardService.createDashboard(tenantId, dashboard);
     }
 
-    /**
-     * Partager un dashboard avec un autre utilisateur
-     * @param dashboardId L'ID du dashboard à partager
-     * @param userId L'ID de l'utilisateur avec lequel partager
-     * @return Réponse avec le message de confirmation
-     */
-    @PostMapping("/share/{dashboardId}/{userId}")
-    public ResponseEntity<String> shareDashboard(@PathVariable Long dashboardId, @PathVariable Long userId) {
-        dashboardService.shareDashboard(dashboardId, userId);
-        return ResponseEntity.ok("Dashboard partagé avec succès");
+
+    @GetMapping("/tenant/{tenantId}")
+    public List<DashboardEntity> getDashboardsByTenant(@PathVariable Long tenantId) {
+        return dashboardService.getDashboardsByTenant(tenantId);
     }
 
-    /**
-     * Personnaliser un dashboard (modifier les widgets ou l'agencement)
-     * @param dashboardId L'ID du dashboard à personnaliser
-     * @param dashboard L'objet dashboard mis à jour
-     * @return Réponse avec le dashboard mis à jour
-     */
+
     @PutMapping("/customize/{dashboardId}")
     public ResponseEntity<DashboardEntity> customizeDashboard(@PathVariable Long dashboardId, @RequestBody DashboardEntity dashboard) {
         DashboardEntity updatedDashboard = dashboardService.customizeDashboard(dashboardId, dashboard);
         return ResponseEntity.ok(updatedDashboard);
     }
 
-    /**
-     * Supprimer un dashboard
-     * @param dashboardId L'ID du dashboard à supprimer
-     * @return Réponse avec le message de confirmation
-     */
+
     @DeleteMapping("/delete/{dashboardId}")
     public ResponseEntity<String> deleteDashboard(@PathVariable Long dashboardId) {
         dashboardService.deleteDashboard(dashboardId);
         return ResponseEntity.ok("Dashboard supprimé avec succès");
     }
 
-    /**
-     * Récupérer tous les dashboards pour un locataire
-     * @return Liste des dashboards
-     */
-    @GetMapping("/list")
-    public ResponseEntity<List<DashboardEntity>> getAllDashboards() {
-        List<DashboardEntity> dashboards = dashboardService.getAllDashboards();
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<DashboardEntity>> getUserDashboards(@PathVariable Long userId) {
+        List<DashboardEntity> dashboards = dashboardService.getUserDashboards(userId);
         return ResponseEntity.ok(dashboards);
     }
+
 }

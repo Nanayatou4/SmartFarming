@@ -1,3 +1,4 @@
+/*
 package com.project.elevage.intelligent.Smart_Farming.Services;
 
 import com.project.elevage.intelligent.Smart_Farming.Entities.Plugin.PluginEntity;
@@ -14,18 +15,18 @@ public class PluginService {
     @Autowired
     private PluginEntityRepository pluginRepository;
 
-    // 🔹 1️⃣ Ajouter un plugin
+    // Ajouter un plugin
     public PluginEntity addPlugin(String name, String description, String version, String config) {
         PluginEntity plugin = new PluginEntity(null, name, description, version, config, false);
         return pluginRepository.save(plugin);
     }
 
-    // 🔹 2️⃣ Lister tous les plugins
+    // Lister tous les plugins
     public List<PluginEntity> getAllPlugins() {
         return pluginRepository.findAll();
     }
 
-    // 🔹 3️⃣ Activer un plugin
+    // Activer un plugin
     public PluginEntity activatePlugin(Long pluginId) {
         Optional<PluginEntity> optionalPlugin = pluginRepository.findById(pluginId);
         if (optionalPlugin.isPresent()) {
@@ -36,7 +37,7 @@ public class PluginService {
         throw new RuntimeException("Plugin introuvable !");
     }
 
-    // 🔹 4️⃣ Désactiver un plugin
+    // Désactiver un plugin
     public PluginEntity deactivatePlugin(Long pluginId) {
         Optional<PluginEntity> optionalPlugin = pluginRepository.findById(pluginId);
         if (optionalPlugin.isPresent()) {
@@ -47,8 +48,9 @@ public class PluginService {
         throw new RuntimeException("Plugin introuvable !");
     }
 
-    // 🔹 5️⃣ Supprimer un plugin
+    // Supprimer un plugin
     public void deletePlugin(Long pluginId) {
         pluginRepository.deleteById(pluginId);
     }
 }
+*/

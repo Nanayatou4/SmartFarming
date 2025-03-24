@@ -4,68 +4,57 @@ import com.project.elevage.intelligent.Smart_Farming.Entities.Device.DeviceEntit
 import com.project.elevage.intelligent.Smart_Farming.Services.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/devices")
+@RequestMapping("/api/tenant-admins/devices")
 public class DeviceController {
 
     @Autowired
     private DeviceService deviceService;
 
-    /**
-     * Ajouter un nouveau dispositif
-     * @param device L'objet dispositif à ajouter
-     * @return Réponse avec l'objet dispositif ajouté
-     */
-    @PostMapping("/add")
-    public ResponseEntity<DeviceEntity> addDevice(@RequestBody DeviceEntity device) {
-        DeviceEntity newDevice = deviceService.addDevice(device);
-        return ResponseEntity.ok(newDevice);
+
+    @PostMapping("/add/{tenantId}")
+    @PreAuthorize("hasRole('TENANT_ADMIN')")
+    public DeviceEntity addDeviceToTenant(@PathVariable Long tenantId, @RequestBody DeviceEntity device) {
+        return deviceService.addDeviceToTenant(tenantId, device);
     }
 
-    /**
-     * Modifier un dispositif existant
-     * @param deviceId L'ID du dispositif à modifier
-     * @param device L'objet dispositif mis à jour
-     * @return Réponse avec l'objet dispositif mis à jour
-     */
+
     @PutMapping("/update/{deviceId}")
-    public ResponseEntity<DeviceEntity> updateDevice(@PathVariable Long deviceId, @RequestBody DeviceEntity device) {
-        DeviceEntity updatedDevice = deviceService.updateDevice(deviceId, device);
-        return ResponseEntity.ok(updatedDevice);
+    @PreAuthorize("hasRole('TENANT_ADMIN')")
+    public DeviceEntity updateDevice(@PathVariable Long deviceId, @RequestBody DeviceEntity device) {
+        return deviceService.updateDevice(deviceId, device);
     }
 
-    /**
-     * Supprimer un dispositif
-     * @param deviceId L'ID du dispositif à supprimer
-     * @return Réponse avec un message de confirmation
-     */
+
     @DeleteMapping("/delete/{deviceId}")
-    public ResponseEntity<String> deleteDevice(@PathVariable Long deviceId) {
+    @PreAuthorize("hasRole('TENANT_ADMIN')")
+    public void deleteDevice(@PathVariable Long deviceId) {
         deviceService.deleteDevice(deviceId);
-        return ResponseEntity.ok("Dispositif supprimé avec succès");
     }
 
-    /**
-     * Récupérer la liste des dispositifs
-     * @return Liste des dispositifs
-     */
-    @GetMapping("/list")
-    public ResponseEntity<List<DeviceEntity>> getAllDevices() {
-        List<DeviceEntity> devices = deviceService.getAllDevices();
-        return ResponseEntity.ok(devices);
+
+    @GetMapping("/tenant/{tenantId}")
+    @PreAuthorize("hasRole('TENANT_ADMIN')")
+    public List<DeviceEntity> getDevicesByTenant(@PathVariable Long tenantId) {
+        return deviceService.getDevicesByTenant(tenantId);
     }
 
-    /**
-     * Modifier la fréquence d’envoi d’un appareil
-     */
-    @PutMapping("/updateFrequency/{deviceId}")
-    public ResponseEntity<DeviceEntity> updateDeviceFrequency(@PathVariable Long deviceId, @RequestParam int frequency) {
-        DeviceEntity updatedDevice = deviceService.updateDeviceFrequency(deviceId, frequency);
-        return ResponseEntity.ok(updatedDevice);
+
+    @GetMapping("devices/all")
+    @PreAuthorize("hasRole('TENANT_ADMIN')")
+    public List<DeviceEntity> getAllDevices() {
+        return deviceService.getAllDevices();
     }
 
+
+    @PutMapping("/update-frequency/{deviceId}")
+    @PreAuthorize("hasRole('TENANT_ADMIN')")
+    public DeviceEntity updateDeviceFrequency(@PathVariable Long deviceId, @RequestBody int newFrequency) {
+        return deviceService.updateDeviceFrequency(deviceId, newFrequency);
+    }
 }
