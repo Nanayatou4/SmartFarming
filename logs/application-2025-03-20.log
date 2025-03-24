@@ -1,0 +1,24 @@
+2025-03-20 07:05:45 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[unknown], outboundChannel[unknown], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 0, completed tasks = 11]
+2025-03-20 07:08:15 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-20 07:08:15 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-03-20 07:08:15 [SpringApplicationShutdownHook] ERROR o.s.i.m.i.MqttPahoMessageDrivenChannelAdapter - Exception while unsubscribing
+org.eclipse.paho.client.mqttv3.MqttException: Client is not connected
+	at org.eclipse.paho.client.mqttv3.internal.ExceptionHelper.createMqttException(ExceptionHelper.java:31)
+	at org.eclipse.paho.client.mqttv3.internal.ClientComms.sendNoWait(ClientComms.java:205)
+	at org.eclipse.paho.client.mqttv3.MqttAsyncClient.unsubscribe(MqttAsyncClient.java:1244)
+	at org.eclipse.paho.client.mqttv3.MqttAsyncClient.unsubscribe(MqttAsyncClient.java:1195)
+	at org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter.doStop(MqttPahoMessageDrivenChannelAdapter.java:215)
+	at org.springframework.integration.endpoint.AbstractEndpoint.doStop(AbstractEndpoint.java:211)
+	at org.springframework.integration.endpoint.AbstractEndpoint.stop(AbstractEndpoint.java:192)
+	at org.springframework.context.support.DefaultLifecycleProcessor.doStop(DefaultLifecycleProcessor.java:384)
+	at org.springframework.context.support.DefaultLifecycleProcessor$LifecycleGroup.stop(DefaultLifecycleProcessor.java:526)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.context.support.DefaultLifecycleProcessor.stopBeans(DefaultLifecycleProcessor.java:353)
+	at org.springframework.context.support.DefaultLifecycleProcessor.onClose(DefaultLifecycleProcessor.java:253)
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1172)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:174)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1126)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:147)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116)
+	at java.base/java.lang.Thread.run(Thread.java:840)
