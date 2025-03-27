@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -30,6 +31,9 @@ public class WidgetService {
 
     @Autowired
     private TenantEntityRepository tenantRepository;
+
+    @Autowired
+    private AnalyticsService analyticsService;
 
     ///  *************************ADMIN SYSTEM**************************
 
@@ -63,6 +67,39 @@ public class WidgetService {
         widget.setStatus(WidgetStatus.ACTIVE);
         widgetRepository.save(widget);
     }
+
+    public WidgetEntity createAnalyticsWidget(Long dashboardId, String metricType) {
+        DashboardEntity dashboard = dashboardRepository.findById(dashboardId)
+                .orElseThrow(() -> new RuntimeException("Dashboard non trouvé"));
+
+        WidgetEntity widget = new WidgetEntity();
+        widget.setDashboard(dashboard);
+        widget.setType("analytics");
+        widget.setTitle("Analytics: " + metricType);
+        widget.setConfig(metricType); // Stocke "temperature" ou "humidity"
+
+        return widgetRepository.save(widget);
+    }
+
+    public Map<String, Double> getAnalyticsData(Long widgetId) {
+        WidgetEntity widget = widgetRepository.findById(widgetId)
+                .orElseThrow(() -> new RuntimeException("Widget non trouvé"));
+
+        if (!"analytics".equals(widget.getType())) {
+            throw new RuntimeException("Ce widget n'est pas un widget analytique.");
+        }
+
+        String metricType = widget.getConfig();
+
+        if ("temperature".equals(metricType)) {
+            return analyticsService.getAverageTemperature();
+        } else if ("humidity".equals(metricType)) {
+            return analyticsService.getAverageHumidity();
+        } else {
+            throw new RuntimeException("Type de métrique inconnu.");
+        }
+    }
+
 
 
 

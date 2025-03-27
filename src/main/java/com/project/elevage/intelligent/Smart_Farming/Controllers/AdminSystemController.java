@@ -8,6 +8,7 @@ import com.project.elevage.intelligent.Smart_Farming.Entities.Edge.EdgeEntity;
 import com.project.elevage.intelligent.Smart_Farming.Entities.Resources.ResourceEntity;
 import com.project.elevage.intelligent.Smart_Farming.Entities.Resources.ResourceUsage;
 import com.project.elevage.intelligent.Smart_Farming.Entities.Resources.TenantResource;
+import com.project.elevage.intelligent.Smart_Farming.Entities.Telemetrie.TelemetryDataEntity;
 import com.project.elevage.intelligent.Smart_Farming.Entities.TenantAdmin.TenantAdminEntity;
 import com.project.elevage.intelligent.Smart_Farming.Entities.Tenants.TenantEntity;
 import com.project.elevage.intelligent.Smart_Farming.Entities.Widget.WidgetEntity;
@@ -53,11 +54,20 @@ public class AdminSystemController {
     @Autowired
     private WidgetService widgetService;
 
+    @Autowired
+    private AnalyticsService analyticsService;
+
+    @Autowired
+    private TelemetryDataService telemetryDataService;
+
+    @Autowired
+    private RateLimiterService rateLimiterService;
+
 
     /// Les Tenants
 
-    @PreAuthorize("hasRole('ADMIN_SYSTEM')")
     @PostMapping("/create-tenant")
+    @PreAuthorize("hasRole('ADMIN_SYSTEM')")
     public ResponseEntity<TenantEntity> createTenant(@RequestBody TenantEntity tenant) {
         return ResponseEntity.ok(tenantService.createTenant(tenant));
     }
@@ -186,10 +196,7 @@ public class AdminSystemController {
     @Autowired
     private SystemMonitoringService systemMonitoringService;
 
-    /**
-     * Endpoint pour obtenir les statistiques du système (CPU, mémoire)
-     * @return Les informations de surveillance système sous forme de map
-     */
+
     @GetMapping("/stats")
     @PreAuthorize("hasRole('ADMIN_SYSTEM')")
     public Map<String, Object> getSystemStats() {
@@ -380,4 +387,52 @@ public class AdminSystemController {
         }
     }
 
+    /// Analytic
+    @GetMapping("analytic/temperature")
+    @PreAuthorize("hasRole('ADMIN_SYSTEM')")
+    public ResponseEntity<Map<String, Double>> getGlobalTemperature() {
+        return ResponseEntity.ok(analyticsService.getGlobalAverageTemperature());
+    }
+
+    @GetMapping("analytic/humidity")
+    @PreAuthorize("hasRole('ADMIN_SYSTEM')")
+    public ResponseEntity<Map<String, Double>> getGlobalHumidity() {
+        return ResponseEntity.ok(analyticsService.getGlobalAverageHumidity());
+    }
+
+    /// Telemetry
+
+    @PostMapping("telemetry/create")
+    @PreAuthorize("hasRole('ADMIN_SYSTEM')")
+    public ResponseEntity<?> saveTelemetryData(@RequestBody TelemetryDataEntity data) {
+        if (!rateLimiterService.tryConsume()) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .body("Trop de requêtes ! Veuillez réessayer plus tard.");
+        }
+        TelemetryDataEntity savedData = telemetryDataService.saveTelemetryData(data);
+        return ResponseEntity.ok(savedData);
+    }
+
+    @GetMapping("telemetry/all")
+    @PreAuthorize("hasRole('ADMIN_SYSTEM')")
+    public ResponseEntity<?> getAllTelemetryData() {
+        if (!rateLimiterService.tryConsume()) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .body("Trop de requêtes ! Veuillez réessayer plus tard.");
+        }
+        List<TelemetryDataEntity> dataList = telemetryDataService.getAllTelemetryData();
+        return ResponseEntity.ok(dataList);
+    }
+
+
+    @GetMapping("telemetry/device/{deviceId}")
+    @PreAuthorize("hasRole('ADMIN_SYSTEM')")
+    public ResponseEntity<?> getTelemetryDataByDevice(@PathVariable Long deviceId) {
+        if (!rateLimiterService.tryConsume()) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .body("Trop de requêtes ! Veuillez réessayer plus tard.");
+        }
+        List<TelemetryDataEntity> dataList = telemetryDataService.getTelemetryDataByDevice(deviceId);
+        return ResponseEntity.ok(dataList);
+    }
 }

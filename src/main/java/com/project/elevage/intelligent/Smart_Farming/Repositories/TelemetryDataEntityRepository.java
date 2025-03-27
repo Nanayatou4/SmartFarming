@@ -9,4 +9,8 @@ import java.util.List;
 @Repository
 public interface TelemetryDataEntityRepository extends JpaRepository<TelemetryDataEntity, Long> {
     List<TelemetryDataEntity> findByDeviceId(Long deviceId);
+
+    List<TelemetryDataEntity> findByTenantId(Long tenantId);
+
+    List<TelemetryDataEntity> findByDeviceIdAndTenantId(Long deviceId, Long tenantId);
 }

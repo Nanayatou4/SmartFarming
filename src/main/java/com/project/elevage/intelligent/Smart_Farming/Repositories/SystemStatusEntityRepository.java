@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface SystemStatusEntityRepository extends JpaRepository<SystemStatusEntity, Long> {
     List<SystemStatusEntity> findByDeviceName(String deviceName);
+
+    List<SystemStatusEntity> findByTenantId(Long tenantId);
 }

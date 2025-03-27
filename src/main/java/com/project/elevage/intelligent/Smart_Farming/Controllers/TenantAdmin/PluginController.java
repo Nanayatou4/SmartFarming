@@ -1,3 +1,4 @@
+/*
 package com.project.elevage.intelligent.Smart_Farming.Controllers.TenantAdmin;
 
 import com.project.elevage.intelligent.Smart_Farming.Entities.Plugin.PluginEntity;
@@ -52,4 +53,4 @@ public class PluginController {
         pluginService.deletePlugin(id);
         return ResponseEntity.noContent().build();
     }
-}
+}*/

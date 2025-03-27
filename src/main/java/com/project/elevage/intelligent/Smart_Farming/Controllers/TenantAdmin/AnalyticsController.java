@@ -1,32 +1,35 @@
 package com.project.elevage.intelligent.Smart_Farming.Controllers.TenantAdmin;
 
+import com.project.elevage.intelligent.Smart_Farming.DTO.AnalyticRequest;
 import com.project.elevage.intelligent.Smart_Farming.Services.AnalyticsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/analytics")
+@RequestMapping("/api/tenant-admins/analytics")
 public class AnalyticsController {
 
-    private final AnalyticsService analyticsService;
+    @Autowired
+    private  AnalyticsService analyticsService;
 
-    public AnalyticsController(AnalyticsService analyticsService) {
-        this.analyticsService = analyticsService;
+
+    @PostMapping("/temperature")
+    @PreAuthorize("hasRole('TENANT_ADMIN')")
+    public Map<String, Double> getTenantAverageTemperature(@RequestBody AnalyticRequest request) {
+        return analyticsService.getTenantAverageTemperature(request.getEmail(), request.getTenantId());
     }
 
-    // 🔹 1️⃣ Obtenir la température moyenne par dispositif
-    @GetMapping("/temperature")
-    public ResponseEntity<Map<String, Double>> getAverageTemperature() {
-        return ResponseEntity.ok(analyticsService.getAverageTemperature());
-    }
-
-    // 🔹 2️⃣ Obtenir l’humidité moyenne par dispositif
-    @GetMapping("/humidity")
-    public ResponseEntity<Map<String, Double>> getAverageHumidity() {
-        return ResponseEntity.ok(analyticsService.getAverageHumidity());
+    @PostMapping("/humidity")
+    @PreAuthorize("hasRole('TENANT_ADMIN')")
+    public Map<String, Double> getTenantAverageHumidity(@RequestBody AnalyticRequest request) {
+        return analyticsService.getTenantAverageHumidity(request.getEmail(), request.getTenantId());
     }
 }
+
+
+
+

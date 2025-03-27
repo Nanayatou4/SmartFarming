@@ -19,9 +19,7 @@ public class EdgeController {
     @Autowired
     private EdgeService edgeService;
 
-    /**
-     * Ajouter un Edge pour un Tenant spécifique
-     */
+
     @PostMapping("/tenant-admin/{tenantId}/add")
     @PreAuthorize("hasRole('TENANT_ADMIN')")
     public ResponseEntity<EdgeEntity> addEdgeForTenant(@RequestParam String tenantAdminEmail, @PathVariable Long tenantId, @RequestBody EdgeEntity device) {
@@ -29,9 +27,7 @@ public class EdgeController {
         return new ResponseEntity<>(newDevice, HttpStatus.CREATED);
     }
 
-    /**
-     * Récupérer les Edge d'un Tenant spécifique
-     */
+
     @GetMapping("/tenant-admin/{tenantId}")
     @PreAuthorize("hasRole('TENANT_ADMIN')")
     public ResponseEntity<List<EdgeEntity>> getEdgeByTenant(@RequestParam String tenantAdminEmail, @PathVariable Long tenantId) {
@@ -39,9 +35,7 @@ public class EdgeController {
         return new ResponseEntity<>(devices, HttpStatus.OK);
     }
 
-    /**
-     * Supprimer un Edge d'un Tenant spécifique
-     */
+
     @DeleteMapping("/tenant-admin/{tenantId}/delete/{deviceId}")
     @PreAuthorize("hasRole('TENANT_ADMIN')")
     public ResponseEntity<Void> deleteEdge(@RequestParam String tenantAdminEmail, @PathVariable Long tenantId, @PathVariable Long deviceId) {
@@ -49,9 +43,7 @@ public class EdgeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    /**
-     * Mettre à jour un Edge pour un Tenant spécifique
-     */
+
     @PutMapping("/tenant-admin/{tenantId}/update/{deviceId}")
     @PreAuthorize("hasRole('TENANT_ADMIN')")
     public ResponseEntity<EdgeEntity> updateEdge(@RequestParam String tenantAdminEmail, @PathVariable Long tenantId, @PathVariable Long deviceId, @RequestBody EdgeUpdateDTO updatedDevice) {

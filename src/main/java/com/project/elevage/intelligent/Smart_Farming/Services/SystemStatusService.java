@@ -32,11 +32,14 @@ public class SystemStatusService {
 
     // Obtenir l’historique d’un dispositif
     public List<SystemStatusEntity> getDeviceHistory(String deviceName) {
-        List<SystemStatusEntity> history = systemStatusRepository.findByDeviceName(deviceName);
-        if (history.isEmpty()) {
-            throw new EntityNotFoundException("Aucun historique trouvé pour l'appareil: " + deviceName);
-        }
-        return history;
+        return systemStatusRepository.findByDeviceName(deviceName);
     }
+
+    public void checkAlerts(SystemStatusEntity status) {
+        if (status.getTemperature() > 50) {
+            System.out.println("ALERTE : Température élevée sur " + status.getDeviceName());
+        }
+    }
+
 
 }
