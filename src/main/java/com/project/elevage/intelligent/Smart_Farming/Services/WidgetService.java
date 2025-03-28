@@ -92,9 +92,9 @@ public class WidgetService {
         String metricType = widget.getConfig();
 
         if ("temperature".equals(metricType)) {
-            return analyticsService.getAverageTemperature();
+            return analyticsService.getGlobalAverageTemperature();
         } else if ("humidity".equals(metricType)) {
-            return analyticsService.getAverageHumidity();
+            return analyticsService.getGlobalAverageHumidity();
         } else {
             throw new RuntimeException("Type de métrique inconnu.");
         }

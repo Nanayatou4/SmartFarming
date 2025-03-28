@@ -20,10 +20,12 @@ public class SystemStatusService {
     }
 
     // Ajouter un relevé de statut
-    public SystemStatusEntity addSystemStatus(String deviceName, String status, double battery, double temperature, double humidity) {
-        SystemStatusEntity systemStatus = new SystemStatusEntity(null, deviceName, status, battery, temperature, humidity, LocalDateTime.now());
-        return systemStatusRepository.save(systemStatus);
+    public SystemStatusEntity addSystemStatus(String deviceName, String status, double battery, double temperature, double humidity, Long tenantId) {
+        // Utiliser le constructeur sans l'ID
+        SystemStatusEntity systemStatus = new SystemStatusEntity(deviceName, status, battery, temperature, humidity, LocalDateTime.now(), tenantId);
+        return systemStatusRepository.save(systemStatus); // Sauvegarde de l'entité
     }
+
 
     // Lister tous les statuts du système
     public List<SystemStatusEntity> getAllStatuses() {

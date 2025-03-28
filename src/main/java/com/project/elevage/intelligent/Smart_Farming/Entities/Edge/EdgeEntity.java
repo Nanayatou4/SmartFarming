@@ -35,7 +35,7 @@ public class EdgeEntity {
   @JsonIgnore
   private TenantEntity tenant; // Locataire associé au dispositif
 
-  @OneToMany(mappedBy = "edgeDevice", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "edge", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<DeviceEntity> devices; // Appareils connectés à cette passerelle
 
 }

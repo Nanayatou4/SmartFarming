@@ -22,4 +22,7 @@ public class TelemetryDataEntity {
 
     @ManyToOne
     private DeviceEntity device; // L'appareil qui a envoyé la donnée
+
+    @Column(name = "tenant_id")
+    private Long tenantId;
 }
